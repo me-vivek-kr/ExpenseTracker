@@ -70,7 +70,9 @@ public class ExpenseTrackerApp {
 
 
     private List<Expense> expenses = new ArrayList<>();
-    private String[] categories = {"Food", "Transportation", "Shopping"};
+
+
+    private String[] categories = {"Food", "Travel", "Shopping","Fuel","General","Entertainment"};
 
     private JFrame frame;
     private JTextField dateField;
@@ -164,6 +166,7 @@ public class ExpenseTrackerApp {
         for (Expense expense : expenses) {
             sb.append(expense).append("\n");
         }
+        showExpenseDialog(sb.toString());
         expenseListArea.setText(sb.toString());
     }
 
@@ -172,6 +175,7 @@ public class ExpenseTrackerApp {
         for (String category : categories) {
             sb.append("- ").append(category).append("\n");
         }
+        showCategoryDialog(sb.toString());
         expenseListArea.setText(sb.toString());
     }
 
@@ -204,11 +208,11 @@ public class ExpenseTrackerApp {
     }
     private void viewExpensesFromDatabase() {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
-            String sql = "SELECT ExDATE, Amount, categ, Descrip FROM Expense";
+            String sql = "SELECT ExDATE, Amount, categ,Descrip FROM Expense";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // expenses.clear(); //For Clear Current Expenses List
+             expenses.clear(); //For Clear Current Expenses List
 
             StringBuilder sb = new StringBuilder("Total Expenses:\n");
             while (resultSet.next()) {
@@ -217,10 +221,11 @@ public class ExpenseTrackerApp {
                 String category = resultSet.getString("categ");
                 String description = resultSet.getString("Descrip");
 
+//                Expense expense = new Expense(date, amount, category, description);
                 Expense expense = new Expense(date, amount, category, description);
                 sb.append(expense).append("\n");
             }
-            viewExpenses();
+            //viewExpenses();
             showExpenseDialog(sb.toString());
 
         } catch (SQLException e) {
@@ -237,6 +242,13 @@ public class ExpenseTrackerApp {
         JScrollPane scrollPane = new JScrollPane(textArea);
 
         JOptionPane.showMessageDialog(frame, scrollPane, "View Expenses", JOptionPane.PLAIN_MESSAGE);
+    }
+    private void showCategoryDialog(String content) {
+        JTextArea textArea = new JTextArea(content);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        JOptionPane.showMessageDialog(frame, scrollPane, "View Categories", JOptionPane.PLAIN_MESSAGE);
     }
 
 
