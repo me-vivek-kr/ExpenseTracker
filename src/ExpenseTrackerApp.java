@@ -1,5 +1,5 @@
 package expenseListener;
-
+import java.time.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -140,6 +140,18 @@ public class ExpenseTrackerApp {
         });
         frame.add(viewCategoriesButton);
 
+        //DeleteAllEntries Button
+        JButton deleteAllButton = new JButton("Delete All Entries");
+        deleteAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteAllEntries();
+            }
+        });
+        frame.add(deleteAllButton);
+
+        expenseListArea = new JTextArea();
+
         frame.pack();
         frame.setVisible(true);
     }
@@ -149,18 +161,24 @@ public class ExpenseTrackerApp {
         double amount = Double.parseDouble(amountField.getText());
         String category = categoryComboBox.getSelectedItem().toString();
         String description = descriptionArea.getText();
-
-        try {
-            Date date = dateFormat.parse(dateString);
-            Expense expense = new Expense(date, amount, category, description);
-            expenses.add(expense);
-            showMessage("Expense recorded successfully.");
-            insertExpenseIntoDatabase(expense);
-        } catch (ParseException ex) {
-            showMessage("Invalid date format. Please use YYYY-MM-DD.");
+        if(amount<1)
+        {
+            showMessage("Invalid Amount!");
+            amountField.setText(null);
+            amountField.grabFocus();
+        }
+        else {
+            try {
+                Date date = dateFormat.parse(dateString);
+                Expense expense = new Expense(date, amount, category, description);
+                expenses.add(expense);
+//            showMessage("Expense recorded successfully.");
+                insertExpenseIntoDatabase(expense);
+            } catch (ParseException ex) {
+                showMessage("Invalid date format. Please use YYYY-MM-DD.");
+            }
         }
     }
-
     private void viewExpenses() {
         StringBuilder sb = new StringBuilder("Expenses:\n");
         for (Expense expense : expenses) {
@@ -179,6 +197,37 @@ public class ExpenseTrackerApp {
         expenseListArea.setText(sb.toString());
     }
 
+
+    private void deleteAllEntries() {
+        int confirmation = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete all entries?", "Confirm Delete All", JOptionPane.YES_NO_OPTION);
+        if (confirmation == JOptionPane.YES_OPTION) {
+            deleteAllEntriesFromDatabase();
+            expenses.clear();
+            expenseListArea.setText(null);
+            //showMessage("All entries have been deleted.");
+        }
+    }
+
+    private void deleteAllEntriesFromDatabase() {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
+            String sql = "DELETE FROM Expense";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                showMessage("All entries have been deleted.");
+            }
+            else {
+                showMessage("No entries found in the database.");
+            }
+        } catch (SQLException e) {
+            showMessage("An error occurred while deleting all entries from the database.");
+            e.printStackTrace();
+        }
+    }
+
+    // Initialize the expenseListArea
+
     private void showMessage(String message) {
         JOptionPane.showMessageDialog(frame, message);
     }
@@ -196,7 +245,7 @@ public class ExpenseTrackerApp {
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
-                showMessage("Expense recorded and inserted successfully into the database.");
+                showMessage("Expense recorded Successfully.");
             } else {
                 showMessage("Expense recording failed.");
             }
