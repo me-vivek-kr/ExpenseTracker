@@ -141,6 +141,7 @@ public class ExpenseTrackerApp {
         frame.add(viewCategoriesButton);
 
         //DeleteAllEntries Button
+        
         JButton deleteAllButton = new JButton("Delete All Entries");
         deleteAllButton.addActionListener(new ActionListener() {
             @Override
