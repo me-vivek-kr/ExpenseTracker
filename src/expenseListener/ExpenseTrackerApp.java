@@ -154,6 +154,7 @@ public class ExpenseTrackerApp {
 
         frame.pack();
         frame.setVisible(true);
+
     }
 
     private void addExpense() {
