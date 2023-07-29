@@ -14,7 +14,6 @@ import java.util.List;
 
 class Expense {
 
-
     private Date date;
     private double amount;
     private String category;
@@ -68,7 +67,6 @@ class Expense {
 
 public class ExpenseTrackerApp {
 
-
     private List<Expense> expenses = new ArrayList<>();
 
 
@@ -120,6 +118,7 @@ public class ExpenseTrackerApp {
         });
         frame.add(addButton);
 
+
         // View Expenses Button
         JButton viewExpensesButton = new JButton("View Expenses");
         viewExpensesButton.addActionListener(new ActionListener() {
@@ -129,6 +128,7 @@ public class ExpenseTrackerApp {
             }
         });
         frame.add(viewExpensesButton);
+
 
         // View Categories Button
         JButton viewCategoriesButton = new JButton("View Categories");
@@ -140,8 +140,8 @@ public class ExpenseTrackerApp {
         });
         frame.add(viewCategoriesButton);
 
+
         //DeleteAllEntries Button
-        
         JButton deleteAllButton = new JButton("Delete All Entries");
         deleteAllButton.addActionListener(new ActionListener() {
             @Override
@@ -211,7 +211,8 @@ public class ExpenseTrackerApp {
     }
 
     private void deleteAllEntriesFromDatabase() {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
+        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV")) {
             String sql = "DELETE FROM Expense";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             int rowsAffected = preparedStatement.executeUpdate();
@@ -235,7 +236,9 @@ public class ExpenseTrackerApp {
     }
 
     private void insertExpenseIntoDatabase(Expense expense) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
+        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345"))
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV"))
+        {
             String sql = "INSERT INTO Expense (ExDATE, Amount, categ, Descrip) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
@@ -258,7 +261,8 @@ public class ExpenseTrackerApp {
         }
     }
     private void viewExpensesFromDatabase() {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
+        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345"))
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV")){
             String sql = "SELECT ExDATE, Amount, categ,Descrip FROM Expense";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -272,7 +276,6 @@ public class ExpenseTrackerApp {
                 String category = resultSet.getString("categ");
                 String description = resultSet.getString("Descrip");
 
-//                Expense expense = new Expense(date, amount, category, description);
                 Expense expense = new Expense(date, amount, category, description);
                 sb.append(expense).append("\n");
             }
@@ -305,11 +308,12 @@ public class ExpenseTrackerApp {
 
     public static void main(String[] args) {
 
+
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connect=DriverManager.getConnection("jdbc:mysql://localhost:3306/New","root","12345");
+            //Connection connect=DriverManager.getConnection("jdbc:mysql://localhost:3306/New","root","12345");
+            Connection connect = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/" ,"sql6635969","y842iQNcXV");
             Statement stmt=connect.createStatement();
-            //String sql = "Insert into Expense" + "(ExDATE,Amount,categ,Descrip)";
 
             System.out.println("Connected");
             connect.close();
