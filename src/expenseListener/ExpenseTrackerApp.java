@@ -124,7 +124,7 @@ public class ExpenseTrackerApp {
         viewExpensesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewExpensesFromDatabase(); //
+                viewExpensesFromDatabase(); 
             }
         });
         frame.add(viewExpensesButton);
@@ -211,8 +211,8 @@ public class ExpenseTrackerApp {
     }
 
     private void deleteAllEntriesFromDatabase() {
-        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345")) {
+        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV")) {
             String sql = "DELETE FROM Expense";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             int rowsAffected = preparedStatement.executeUpdate();
@@ -236,8 +236,8 @@ public class ExpenseTrackerApp {
     }
 
     private void insertExpenseIntoDatabase(Expense expense) {
-        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345"))
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV"))
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345"))
+        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV"))
         {
             String sql = "INSERT INTO Expense (ExDATE, Amount, categ, Descrip) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -261,8 +261,9 @@ public class ExpenseTrackerApp {
         }
     }
     private void viewExpensesFromDatabase() {
-        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345"))
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV")){
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/New", "root", "12345"))
+        //try (Connection connection = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/sql6635969" ,"sql6635969","y842iQNcXV"))
+        {
             String sql = "SELECT ExDATE, Amount, categ,Descrip FROM Expense";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -311,8 +312,8 @@ public class ExpenseTrackerApp {
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            //Connection connect=DriverManager.getConnection("jdbc:mysql://localhost:3306/New","root","12345");
-            Connection connect = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/" ,"sql6635969","y842iQNcXV");
+            Connection connect=DriverManager.getConnection("jdbc:mysql://localhost:3306/New","root","12345");
+            //Connection connect = DriverManager.getConnection("jdbc:mysql://sql6.freemysqlhosting.net/" ,"sql6635969","y842iQNcXV");
             Statement stmt=connect.createStatement();
 
             System.out.println("Connected");
